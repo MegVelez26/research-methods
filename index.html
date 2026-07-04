@@ -1,0 +1,717 @@
+<title>Find Your Research Method</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="An interactive guide for graduate students in rhetoric and writing studies to match research goals with a method and course readings." />
+<style>
+  :root{
+    --bg:#faf7f2;
+    --bg-panel:#ffffff;
+    --ink:#2a231c;
+    --ink-soft:#5c5347;
+    --line:#e3dccf;
+    --accent:#8a3b2b;
+    --accent-soft:#f1e3da;
+    --accent-ink:#5c2419;
+    --chip:#f4efe6;
+    --chip-selected:#8a3b2b;
+    --chip-selected-ink:#fff;
+    --focus:#2a6f77;
+    --shadow: 0 1px 2px rgba(40,30,20,.06), 0 8px 24px rgba(40,30,20,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#1b1712;
+      --bg-panel:#241f19;
+      --ink:#f1ece2;
+      --ink-soft:#c6bcac;
+      --line:#3a3226;
+      --accent:#e08a6b;
+      --accent-soft:#3a2a22;
+      --accent-ink:#f6d9c8;
+      --chip:#2c2620;
+      --chip-selected:#e08a6b;
+      --chip-selected-ink:#241f19;
+      --focus:#7fd0d9;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#faf7f2; --bg-panel:#ffffff; --ink:#2a231c; --ink-soft:#5c5347; --line:#e3dccf;
+    --accent:#8a3b2b; --accent-soft:#f1e3da; --accent-ink:#5c2419; --chip:#f4efe6;
+    --chip-selected:#8a3b2b; --chip-selected-ink:#fff; --focus:#2a6f77;
+    --shadow: 0 1px 2px rgba(40,30,20,.06), 0 8px 24px rgba(40,30,20,.06);
+  }
+  :root[data-theme="dark"]{
+    --bg:#1b1712; --bg-panel:#241f19; --ink:#f1ece2; --ink-soft:#c6bcac; --line:#3a3226;
+    --accent:#e08a6b; --accent-soft:#3a2a22; --accent-ink:#f6d9c8; --chip:#2c2620;
+    --chip-selected:#e08a6b; --chip-selected-ink:#241f19; --focus:#7fd0d9;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height:1.5;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:2.5rem 1.25rem 5rem;}
+  header.page{margin-bottom:2rem;}
+  header.page h1{
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-size:2rem;
+    margin:0 0 .5rem;
+    letter-spacing:-.01em;
+  }
+  header.page p{color:var(--ink-soft); max-width:60ch; margin:.25rem 0;}
+
+  .panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:1.5rem;
+    box-shadow:var(--shadow);
+    margin-bottom:1.5rem;
+  }
+  .panel h2{
+    font-size:1.05rem;
+    margin:0 0 .25rem;
+  }
+  .panel .step-label{
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--accent);
+    font-weight:700;
+    margin:0 0 .35rem;
+  }
+  .panel .hint{color:var(--ink-soft); font-size:.92rem; margin:0 0 1rem;}
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px,1fr));
+    gap:.6rem;
+  }
+  .card{
+    text-align:left;
+    border:1px solid var(--line);
+    background:var(--chip);
+    color:var(--ink);
+    border-radius:10px;
+    padding:.7rem .85rem;
+    cursor:pointer;
+    font:inherit;
+    font-size:.92rem;
+    transition:background .12s ease, border-color .12s ease, transform .06s ease;
+  }
+  .card strong{display:block; font-size:.92rem; margin-bottom:.2rem;}
+  .card span{color:var(--ink-soft); font-size:.83rem;}
+  .card:hover{border-color:var(--accent);}
+  .card:active{transform:scale(.99);}
+  .card[aria-pressed="true"]{
+    background:var(--chip-selected);
+    border-color:var(--chip-selected);
+    color:var(--chip-selected-ink);
+  }
+  .card[aria-pressed="true"] span{color:var(--chip-selected-ink); opacity:.85;}
+  .card:focus-visible{outline:3px solid var(--focus); outline-offset:2px;}
+
+  .row-cards{display:flex; flex-wrap:wrap; gap:.6rem;}
+  .row-cards .card{flex:1 1 180px;}
+
+  textarea{
+    width:100%;
+    border:1px solid var(--line);
+    background:var(--bg);
+    color:var(--ink);
+    border-radius:10px;
+    padding:.6rem .75rem;
+    font:inherit;
+    font-size:.92rem;
+    resize:vertical;
+    min-height:2.4rem;
+  }
+  textarea:focus-visible{outline:3px solid var(--focus); outline-offset:1px;}
+
+  #refinerWrap{display:none; margin-top:1rem; padding-top:1rem; border-top:1px dashed var(--line);}
+
+  #results{display:none;}
+  .result-primary{
+    border:1px solid var(--accent);
+    background:var(--accent-soft);
+    border-radius:14px;
+    padding:1.5rem;
+    box-shadow:var(--shadow);
+    margin-bottom:1.25rem;
+  }
+  .result-primary .kicker{
+    font-size:.75rem; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--accent-ink); font-weight:700; margin:0 0 .3rem;
+  }
+  .result-primary h3{margin:0 0 .5rem; font-size:1.4rem; font-family:Georgia, serif;}
+  .result-primary .rationale{margin:0 0 1rem; color:var(--ink);}
+  .reading-list{margin:.4rem 0 0; padding-left:1.1rem;}
+  .reading-list li{margin-bottom:.4rem; font-size:.94rem;}
+
+  .alt-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    gap:1rem;
+    margin-bottom:1.25rem;
+  }
+  .alt-card{
+    border:1px solid var(--line);
+    background:var(--bg-panel);
+    border-radius:12px;
+    padding:1rem 1.1rem;
+  }
+  .alt-card h4{margin:0 0 .3rem; font-size:1rem;}
+  .alt-card p{margin:0 0 .5rem; color:var(--ink-soft); font-size:.88rem;}
+  .alt-card ul{margin:0; padding-left:1.1rem; font-size:.86rem;}
+  .alt-card li{margin-bottom:.25rem;}
+
+  .note-block{
+    border-left:3px solid var(--accent);
+    padding:.15rem 0 .15rem 1rem;
+    margin:0 0 1.25rem;
+    color:var(--ink-soft);
+    font-size:.9rem;
+  }
+
+  details.supp{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:.7rem 1rem;
+    margin-bottom:.75rem;
+    background:var(--bg-panel);
+  }
+  details.supp summary{cursor:pointer; font-weight:600;}
+  details.supp ul{margin:.6rem 0 0; padding-left:1.1rem; font-size:.9rem;}
+  details.supp li{margin-bottom:.35rem;}
+
+  button.reset{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    border-radius:8px;
+    padding:.45rem .8rem;
+    font:inherit;
+    font-size:.85rem;
+    cursor:pointer;
+  }
+  button.reset:hover{border-color:var(--accent); color:var(--accent);}
+
+  .rq-echo{
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:.9rem;
+    margin:0 0 1rem;
+    padding:.6rem .8rem;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:8px;
+  }
+
+  .reference h2{
+    font-family: Georgia, serif;
+    font-size:1.3rem;
+    margin-bottom:.25rem;
+  }
+  .reference > p{color:var(--ink-soft); font-size:.92rem; margin-top:0;}
+
+  footer.page{color:var(--ink-soft); font-size:.8rem; margin-top:2rem; text-align:center;}
+</style>
+
+<div class="wrap">
+
+  <header class="page">
+    <h1>Find Your Research Method</h1>
+    <p>A quick way to connect a research goal in rhetoric and writing studies to a method &mdash; and to the specific readings from this course that will help you use it.</p>
+  </header>
+
+  <div class="panel" id="q1panel">
+    <p class="step-label">Step 1</p>
+    <h2>What do you most want to find out?</h2>
+    <p class="hint">Pick the statement closest to what's driving your project.</p>
+    <div class="cards" id="goalCards" role="group" aria-label="Research goal"></div>
+
+    <div id="refinerWrap">
+      <p class="step-label">Quick follow-up</p>
+      <h2 id="refinerQuestion" style="font-size:1rem;"></h2>
+      <div class="row-cards" id="refinerCards" role="group" aria-label="Refinement"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="q2panel">
+    <p class="step-label">Step 2</p>
+    <h2>Will your research involve&hellip;</h2>
+    <p class="hint">This shapes which method fits and whether human-subjects ethics readings apply.</p>
+    <div class="row-cards" id="subjectCards" role="group" aria-label="Subject of research"></div>
+  </div>
+
+  <div class="panel" id="q3panel">
+    <p class="step-label">Optional</p>
+    <h2>Jot your research question</h2>
+    <p class="hint">For your own reference only &mdash; it's echoed back with your recommendation, not analyzed.</p>
+    <textarea id="rqInput" placeholder="e.g., How do multilingual first-year students describe revising for different instructors?"></textarea>
+  </div>
+
+  <section id="results"></section>
+
+  <section class="reference panel">
+    <h2>Browse every method &amp; reading</h2>
+    <p>The full course list, organized by method, whether or not it matches your answers above.</p>
+    <div id="refAccordion"></div>
+  </section>
+
+  <footer class="page">Built from this course's reading list. Not a substitute for talking through your design with your instructor or committee.</footer>
+</div>
+
+<script>
+(function(){
+
+  var METHODS = {
+    "interviewing": {
+      name: "Interviewing",
+      blurb: "In-depth, semi-structured conversations that surface how people understand, narrate, and make meaning of their own writing lives and processes.",
+      readings: [
+        "Rubin &amp; Rubin, <em>Qualitative Interviewing</em>, Ch. 1, 2, 6, 7, 8, 9, and 10"
+      ]
+    },
+    "survey": {
+      name: "Survey Research",
+      blurb: "Structured questionnaires that gather comparable data &mdash; attitudes, self-reported practices, demographics &mdash; from enough respondents to describe patterns across a population.",
+      readings: [
+        "Swanson &amp; Holton, &ldquo;Survey Methods&rdquo;",
+        "Fowler, selections from &ldquo;Improving Survey Questions&rdquo;"
+      ]
+    },
+    "observation": {
+      name: "Observation",
+      blurb: "Systematic watching and field-noting of people composing or interacting in a naturally occurring setting &mdash; capturing what actually happens, not just what people say happens.",
+      readings: [
+        "Spinuzzi, &ldquo;Ch. 7: Observing,&rdquo; from <em>Top Sight</em>",
+        "Mulhall, &ldquo;Field Notes: Notes on Observation&rdquo;"
+      ]
+    },
+    "ethnography": {
+      name: "Ethnography",
+      blurb: "Sustained, immersive fieldwork in a community, workplace, or classroom that combines observation, interviews, and document collection to understand a literacy or writing culture from the inside.",
+      readings: [
+        "Lillis, &ldquo;Ethnography as Method, Methodology, and &lsquo;Deep Theorizing&rsquo;&rdquo;",
+        "Brooke, &ldquo;Ethnographic Practice as a Means of Invention: Seeking a Rhetorical Paradigm for Ethnographic Writing&rdquo;",
+        "Cross, &ldquo;Ethnographic Research in Business and Technical Writing: Between Extremes and Margins,&rdquo; <em>Journal of Business and Technical Communication</em> 8:1 (1994)",
+        "Citron, &ldquo;Wearing a Pith Helmet at a Sly Angle: or, Can Writing Researchers Do Ethnography in a Postmodern Era,&rdquo; <em>Written Communication</em> 10:3 (1993)",
+        "Herndl, &ldquo;Writing Ethnography: Representation, Rhetoric, and Institutional Practices&rdquo;",
+        "Humphreys &amp; Watson, &ldquo;Ethnographic Practices&rdquo;",
+        "LaFrance &amp; Nichols, &ldquo;Institutional Ethnography as Materialist Framework for Writing Program Research and the Faculty-Staff Work Standpoints Project,&rdquo; <em>CCC</em> 64:1 (2012)"
+      ]
+    },
+    "narrative-analysis": {
+      name: "Narrative Analysis",
+      blurb: "Treats people's (or texts') stories as data in their own right, analyzing how experience gets shaped, sequenced, and given meaning through narrative form.",
+      readings: [
+        "Addison, &ldquo;Narrative as Method and Methodology&rdquo;",
+        "Newkirk, &ldquo;The Narrative Roots of the Case Study&rdquo;"
+      ]
+    },
+    "archival": {
+      name: "Archival / Historical Research",
+      blurb: "Historical research in primary source materials &mdash; institutional records, manuscripts, correspondence, past student writing &mdash; to reconstruct and interpret how practices, programs, or ideas developed over time.",
+      readings: [
+        "Connors, &ldquo;Dreams and Play: Historical Method and Methodology&rdquo;",
+        "Rose, &ldquo;Preserving Our Histories of Institutional Change&rdquo;",
+        "Gaillet, &ldquo;(Per)forming Archival Research Methodologies&rdquo;",
+        "Gold, &ldquo;Remapping Revisionist Historiography,&rdquo; <em>CCC</em> 64:1 (2012)",
+        "Bordelon, &ldquo;Composing Women's Civic Identities during the Progressive Era,&rdquo; <em>CCC</em> 61:3 (2010)",
+        "Buehl, Chute &amp; Fields, &ldquo;Training in the Archives: Archival Research as Professional Development,&rdquo; <em>CCC</em> 64:2 (2012)",
+        "Carter &amp; Conrad, &ldquo;In Possession of Community: Toward a More Sustainable Local,&rdquo; <em>CCC</em> 64:1 (2012)",
+        "McKee &amp; Porter, &ldquo;The Ethics of Archival Research,&rdquo; <em>CCC</em> 64:1 (2012)",
+        "Ramsey et al. (Eds.), <em>Working in the Archives</em> &mdash; Part One chapters by Glenn &amp; Enoch, Gaillet, Ostergaard, Gold, and Mortensen, plus later chapters by Morris &amp; Rose, Ramsey, Warnick, Zinkham, Yakel, Marshall, Masters, Tirabassi, Ritter, Lerner, Graban, and Lucas &amp; Strain"
+      ]
+    },
+    "case-study": {
+      name: "Case Study",
+      blurb: "A bounded, in-depth investigation of one writer, classroom, program, or text, using multiple kinds of evidence to build a holistic, contextualized account.",
+      readings: [
+        "Yin, <em>Case Study Research: Design and Methods</em>, 5th ed. (SAGE, 2013) &mdash; Ch. 1&ndash;6 assigned across the term",
+        "Newkirk, &ldquo;The Narrative Roots of the Case Study&rdquo;"
+      ]
+    },
+    "program-evaluation": {
+      name: "Program Review &amp; Evaluation",
+      blurb: "Systematic assessment of a writing program, curriculum, or intervention &mdash; often combining documents, surveys, and interviews &mdash; aimed at describing how it is working and producing actionable recommendations.",
+      readings: [
+        "Anson &amp; Brown, &ldquo;Subject to Interpretation&rdquo;",
+        "Phelps, &ldquo;Telling a Writing Program Its Own Story&rdquo;",
+        "McLeod, &ldquo;Evaluating Writing Programs: Paradigms, Problems, Possibilities&rdquo;",
+        "Lauer &amp; Asher, &ldquo;Ch. 11: Program Review&rdquo;",
+        "Spinuzzi, &ldquo;Ch. 22: Describing Systemic Issues,&rdquo; &ldquo;Ch. 23: Turning Findings Into Convincing Recommendations,&rdquo; and &ldquo;Ch. 24: Writing the Recommendation Report&rdquo;"
+      ]
+    },
+    "teacher-research": {
+      name: "Teacher Research / Lore",
+      blurb: "Practitioner inquiry in which you systematically study your own classroom and teaching, turning reflective practice into a disciplined research account.",
+      readings: [
+        "North, &ldquo;The Practitioners&rdquo;",
+        "Fulkerson, &ldquo;The Epistemic Paradoxes of Lore from <em>The Making of Knowledge in Composition</em> to the Present (Almost)&rdquo;",
+        "Fecho et al., &ldquo;Teacher Research in Writing Classrooms&rdquo;"
+      ]
+    },
+    "grounded-theory": {
+      name: "Grounded Theory",
+      blurb: "An inductive approach that builds explanatory theory directly from data through iterative coding and constant comparison &mdash; used when no existing framework adequately explains what you're seeing.",
+      readings: [
+        "Strauss &amp; Corbin, &ldquo;Grounded Theory&rdquo;",
+        "Charmaz, &ldquo;Grounded Theory as an Emergent Method,&rdquo; in <em>Handbook of Emergent Methods</em>"
+      ]
+    },
+    "institutional-critique": {
+      name: "Institutional Critique",
+      blurb: "A rhetorical methodology for mapping how institutional structures, policies, and power relations shape &mdash; and are shaped by &mdash; writing and writers, often aimed at changing those structures.",
+      readings: [
+        "Porter et al., &ldquo;Institutional Critique: A Rhetorical Methodology for Change&rdquo;",
+        "LaFrance &amp; Nichols, &ldquo;Institutional Ethnography as Materialist Framework for Writing Program Research and the Faculty-Staff Work Standpoints Project,&rdquo; <em>CCC</em> 64:1 (2012)"
+      ]
+    },
+    "bibliometric": {
+      name: "Bibliometric / Field-Mapping Analysis",
+      blurb: "Quantitative analysis of publication, citation, or conference data to map trends and shifts in a scholarly field over time.",
+      readings: [
+        "Mueller, &ldquo;Grasping Rhetoric and Composition by Its Long Tail: What Graphs Can Tell Us about the Field's Changing Shape,&rdquo; <em>CCC</em> 64",
+        "Mueller, &ldquo;Views from a Distance: A Nephological Model of the CCCC Chairs' Addresses, 1977&ndash;2011,&rdquo; <em>Topoi</em>"
+      ]
+    },
+    "digital-research": {
+      name: "Digital Research Methods",
+      blurb: "Methods adapted for born-digital or online contexts &mdash; collecting, sampling, and analyzing digital texts, traces, or interactions, with attention to platform-specific ethics.",
+      readings: [
+        "McKee &amp; DeVoss, &ldquo;Introduction&rdquo; to <em>Digital Writing Research</em>",
+        "Purdy &amp; Walker, &ldquo;Digital Breadcrumbs: Case Studies of Online Research,&rdquo; <em>Kairos</em> 11.2",
+        "Digital Archive of Literacy Narratives (daln.osu.edu) and its IRB protocols, as a model"
+      ]
+    },
+    "empirical-quantitative": {
+      name: "Empirical / Quantitative Research",
+      blurb: "Systematic, often experimental or quasi-experimental research that measures variables and uses numerical or coded data to support generalizable claims about writing and writers.",
+      readings: [
+        "Charney, &ldquo;Empiricism Is Not a Four-Letter Word,&rdquo; <em>CCC</em> 47.4 (1996)",
+        "Johanek, &ldquo;Numbers, Narratives, and He vs. She: Issues of Audience in Composition Research,&rdquo; in <em>Composing Research</em>",
+        "Selfe, &ldquo;The Predrafting Processes of Four High- and Four Low-Apprehensive Writers,&rdquo; <em>Research in the Teaching of English</em> 18 (1984)",
+        "Lang &amp; Baehr, &ldquo;Data Mining: A Hybrid Methodology for Complex and Dynamic Research,&rdquo; <em>CCC</em> 64:1 (2012)",
+        "Wardle, &ldquo;Understanding &lsquo;Transfer&rsquo; from FYC: Preliminary Results of a Longitudinal Study,&rdquo; <em>WPA</em> 31.1/2 (2007)",
+        "Grant-Davie, &ldquo;Coding Data: Issues of Validity, Reliability, and Interpretation,&rdquo; in <em>Methods and Methodology in Composition Research</em>",
+        "Wilder &amp; Wolfe, &ldquo;Sharing the Tacit Rhetorical Knowledge of the Literary Scholar&hellip;,&rdquo; <em>Research in the Teaching of English</em> 44.2 (2009)",
+        "Smagorinsky et al., &ldquo;Bullshit in Academic Writing: A Protocol Analysis of a High School Senior's Process of Interpreting <em>Much Ado about Nothing</em>,&rdquo; <em>Research in the Teaching of English</em> 44:4 (2010)"
+      ]
+    },
+    "mixed-methods": {
+      name: "Mixed Methods",
+      blurb: "Deliberately combines qualitative and quantitative data, or multiple qualitative methods, and triangulates across them for a fuller, more validated picture than either alone.",
+      readings: [
+        "Swanson &amp; Holton, &ldquo;Mixed Methods&rdquo;",
+        "Yin, <em>Case Study Research: Design and Methods</em> (as a model of triangulating qualitative and quantitative evidence)"
+      ]
+    }
+  };
+
+  var SUPPLEMENTS = {
+    foundational: {
+      name: "Getting Started / Framing a Question",
+      readings: [
+        "Blakeslee &amp; Fleischer, <em>Becoming a Writing Studies Researcher</em>, Ch. 1&ndash;5 (esp. &ldquo;What's Your Question?&rdquo;)",
+        "Takayoshi, Tomlinson, &amp; Castillo, &ldquo;The Construction of Research Problems and Methods&rdquo;",
+        "Johanek, <em>Composing Research: A Contextualist Paradigm for Rhetoric and Composition</em>, Ch. 1: &ldquo;Composition Research: Issues in Context&rdquo;",
+        "Rickly, &ldquo;Messy Contexts: The Required Research Methods Course as a Scene of Rhetorical Practice&rdquo;",
+        "Lauer &amp; Asher, &ldquo;Introduction&rdquo; to <em>Composition Research: Empirical Designs</em>"
+      ]
+    },
+    ethics: {
+      name: "Research Ethics",
+      readings: [
+        "CCCC Guidelines for the Ethical Conduct of Research in Composition Studies",
+        "Anderson, &ldquo;Simple Gifts: Ethical Issues in the Conduct of Person-Based Composition Research,&rdquo; <em>CCC</em> 49.1 (1998)",
+        "Barton, &ldquo;Further Contributions from the Ethical Turn in Composition/Rhetoric: Analyzing Ethics in Interaction&rdquo;",
+        "Schneider, &ldquo;Ethical Research and Pedagogical Gaps&rdquo;",
+        "McKee &amp; Porter, &ldquo;The Ethics of Archival Research,&rdquo; <em>CCC</em> 64:1 (2012) &mdash; especially relevant for archival work"
+      ]
+    },
+    codingWriteup: {
+      name: "Coding &amp; Writing Up the Study",
+      readings: [
+        "Blakeslee &amp; Fleischer, <em>Becoming a Writing Studies Researcher</em>, Ch. 6 &amp; 7",
+        "Spinuzzi, &ldquo;Ch. 11: Triangulating Data&rdquo; and &ldquo;Ch. 12: Coding&rdquo;",
+        "Smagorinsky, &ldquo;The Method Section as Conceptual Epicenter&rdquo;"
+      ]
+    },
+    fieldDebates: {
+      name: "Methodological Debates &amp; Field Context",
+      readings: [
+        "Haswell, &ldquo;NCTE/CCC's War on Scholarship&rdquo;",
+        "Williamson &amp; Huot, &ldquo;A Modest Proposal&rdquo;",
+        "Johanek, <em>Composing Research</em>, Ch. 2 and 3",
+        "Nickoson &amp; Sheridan (Eds.), <em>Writing Studies Research and Practice: Methods and Methodologies</em> (SIU Press, 2012) &mdash; used throughout the term for method-specific chapters"
+      ]
+    }
+  };
+
+  var GOALS = [
+    { id:"experience", label:"Understand experience or meaning-making", desc:"How people interpret, feel about, or talk about something" },
+    { id:"real-time-behavior", label:"See what people actually do", desc:"Composing or interacting, as it happens" },
+    { id:"broad-patterns", label:"Find patterns across a larger group", desc:"Attitudes, behaviors, or trends you can generalize" },
+    { id:"history", label:"Explain how or why something happened", desc:"Using existing historical records or documents" },
+    { id:"one-case", label:"Go deep on one case", desc:"A single writer, program, or text, richly detailed" },
+    { id:"evaluate-program", label:"Evaluate a program or intervention", desc:"Is a curriculum, WPA program, or initiative working?" },
+    { id:"own-teaching", label:"Study my own teaching", desc:"Systematic reflection on my own classroom practice" },
+    { id:"new-theory", label:"Build a new theory", desc:"No existing framework quite explains my data" },
+    { id:"institutions-power", label:"Examine institutional power", desc:"How structures and policies shape writing and writers" },
+    { id:"field-trends", label:"Track trends in the field", desc:"Publication or citation patterns over time" },
+    { id:"digital", label:"Study digital/online writing", desc:"Born-digital texts, platforms, or online interaction" },
+    { id:"combine", label:"Combine multiple methods", desc:"Numbers and words together, triangulated" },
+    { id:"not-sure", label:"I'm not sure yet", desc:"Help me get oriented before I choose" }
+  ];
+
+  var SUBJECTS = [
+    { id:"human", label:"Human participants", desc:"People: interviews, observation, surveys&hellip;" },
+    { id:"texts", label:"Texts &amp; documents", desc:"Writing, records, artifacts, publications&hellip;" },
+    { id:"both", label:"Both", desc:"People and the texts/artifacts they produce" }
+  ];
+
+  var state = { goal:null, subject:null, refiner:null };
+
+  function el(tag, attrs, html){
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  function renderChoiceCards(container, items, groupKey){
+    container.innerHTML = "";
+    items.forEach(function(item){
+      var btn = el("button", { type:"button", class:"card", "aria-pressed": state[groupKey]===item.id ? "true":"false" },
+        "<strong>" + item.label + "</strong><span>" + item.desc + "</span>");
+      btn.addEventListener("click", function(){
+        state[groupKey] = item.id;
+        if (groupKey === "goal") state.refiner = null;
+        renderAll();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function renderRefiner(){
+    var wrap = document.getElementById("refinerWrap");
+    if (state.goal !== "real-time-behavior"){
+      wrap.style.display = "none";
+      return;
+    }
+    wrap.style.display = "block";
+    document.getElementById("refinerQuestion").textContent = "Is this a single/short visit, or sustained immersion over time?";
+    var opts = [
+      { id:"short", label:"Single or short-term visit", desc:"A snapshot of behavior" },
+      { id:"sustained", label:"Sustained immersion", desc:"Weeks or months in the setting" }
+    ];
+    var container = document.getElementById("refinerCards");
+    container.innerHTML = "";
+    opts.forEach(function(item){
+      var btn = el("button", { type:"button", class:"card", "aria-pressed": state.refiner===item.id ? "true":"false" },
+        "<strong>" + item.label + "</strong><span>" + item.desc + "</span>");
+      btn.addEventListener("click", function(){
+        state.refiner = item.id;
+        renderAll();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function decide(goal, subject, refiner){
+    if (!goal || !subject) return null;
+    if (goal === "not-sure") return { primary:null, alternates:[], note:"No single method yet &mdash; and that's fine. Start with the framing readings below, draft a research question, then come back and pick the goal that matches it." };
+
+    var humanish = (subject === "human" || subject === "both");
+    var textish = (subject === "texts" || subject === "both");
+
+    switch(goal){
+      case "experience":
+        return humanish
+          ? { primary:"interviewing", alternates:["narrative-analysis"] }
+          : { primary:"narrative-analysis", alternates:["archival"] };
+
+      case "real-time-behavior":
+        if (!humanish && textish){
+          return { primary:"digital-research", alternates:["case-study"],
+            note:"This goal usually pairs with human participants. If you're really working from textual traces alone (draft histories, logs), Digital Research Methods is the closer fit." };
+        }
+        if (refiner === "sustained"){
+          return { primary:"ethnography", alternates:["observation"] };
+        }
+        return { primary:"observation", alternates:["ethnography"],
+          note: refiner ? undefined : "Answer the follow-up above for a more precise match between Observation and Ethnography." };
+
+      case "broad-patterns":
+        return humanish
+          ? { primary:"survey", alternates:["empirical-quantitative"] }
+          : { primary:"bibliometric", alternates:["empirical-quantitative"] };
+
+      case "history":
+        return textish
+          ? { primary:"archival", alternates:["institutional-critique"] }
+          : { primary:"archival", alternates:["narrative-analysis"],
+              note:"Archival work often incorporates human accounts of the past (e.g., oral history interviews) alongside documents." };
+
+      case "one-case":
+        if (subject === "human") return { primary:"case-study", alternates:["ethnography"] };
+        if (subject === "texts") return { primary:"case-study", alternates:["archival"] };
+        return { primary:"case-study", alternates:["mixed-methods"] };
+
+      case "evaluate-program":
+        return { primary:"program-evaluation", alternates:["mixed-methods"] };
+
+      case "own-teaching":
+        return { primary:"teacher-research", alternates:["case-study"] };
+
+      case "new-theory":
+        return { primary:"grounded-theory", alternates:["case-study"] };
+
+      case "institutions-power":
+        return humanish
+          ? { primary:"institutional-critique", alternates:["ethnography"] }
+          : { primary:"institutional-critique", alternates:["archival"] };
+
+      case "field-trends":
+        return { primary:"bibliometric", alternates:["archival"] };
+
+      case "digital":
+        return humanish
+          ? { primary:"digital-research", alternates:["ethnography"] }
+          : { primary:"digital-research", alternates:["archival"] };
+
+      case "combine":
+        return { primary:"mixed-methods", alternates:["case-study"] };
+    }
+    return null;
+  }
+
+  function renderResults(){
+    var section = document.getElementById("results");
+    var needsRefiner = state.goal === "real-time-behavior" && !state.refiner;
+    if (!state.goal || !state.subject || needsRefiner){
+      section.style.display = "none";
+      section.innerHTML = "";
+      return;
+    }
+
+    var result = decide(state.goal, state.subject, state.refiner);
+    section.style.display = "block";
+    section.innerHTML = "";
+
+    var header = el("div", {}, "");
+    header.style.display = "flex";
+    header.style.justifyContent = "space-between";
+    header.style.alignItems = "center";
+    header.style.margin = "1.5rem 0 .75rem";
+    header.appendChild(el("h2", { style:"margin:0;font-size:1.15rem;" }, "Your recommendation"));
+    var resetBtn = el("button", { type:"button", class:"reset" }, "Start over");
+    resetBtn.addEventListener("click", function(){
+      state = { goal:null, subject:null, refiner:null };
+      document.getElementById("rqInput").value = "";
+      renderAll();
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+    header.appendChild(resetBtn);
+    section.appendChild(header);
+
+    var rq = document.getElementById("rqInput").value.trim();
+    if (rq){
+      section.appendChild(el("p", { class:"rq-echo" }, "Your research question: &ldquo;" + rq.replace(/</g,"&lt;") + "&rdquo;"));
+    }
+
+    if (!result.primary){
+      section.appendChild(el("div", { class:"note-block" }, result.note));
+    } else {
+      var m = METHODS[result.primary];
+      var primaryBox = el("div", { class:"result-primary" }, "");
+      primaryBox.appendChild(el("p", { class:"kicker" }, "Best fit"));
+      primaryBox.appendChild(el("h3", {}, m.name));
+      primaryBox.appendChild(el("p", { class:"rationale" }, rationaleFor(state.goal, state.subject, state.refiner)));
+      var list = el("ul", { class:"reading-list" }, "");
+      m.readings.forEach(function(r){ list.appendChild(el("li", {}, r)); });
+      primaryBox.appendChild(list);
+      section.appendChild(primaryBox);
+
+      if (result.note){
+        section.appendChild(el("div", { class:"note-block" }, result.note));
+      }
+
+      if (result.alternates && result.alternates.length){
+        var altWrap = el("div", { class:"alt-grid" }, "");
+        result.alternates.forEach(function(id){
+          var am = METHODS[id];
+          var card = el("div", { class:"alt-card" }, "");
+          card.appendChild(el("h4", {}, "Also consider: " + am.name));
+          card.appendChild(el("p", {}, am.blurb));
+          var aul = el("ul", {}, "");
+          am.readings.slice(0,2).forEach(function(r){ aul.appendChild(el("li", {}, r)); });
+          card.appendChild(aul);
+          altWrap.appendChild(card);
+        });
+        section.appendChild(altWrap);
+      }
+    }
+
+    if (state.subject === "human" || state.subject === "both"){
+      section.appendChild(supplementBlock("Since you're working with human participants: Research Ethics", SUPPLEMENTS.ethics.readings));
+    }
+    section.appendChild(supplementBlock("Before you start: framing your question", SUPPLEMENTS.foundational.readings));
+    if (result.primary){
+      section.appendChild(supplementBlock("Later &mdash; once you have data: Coding &amp; Writing Up", SUPPLEMENTS.codingWriteup.readings));
+    }
+  }
+
+  function supplementBlock(title, readings){
+    var d = el("details", { class:"supp" }, "");
+    d.appendChild(el("summary", {}, title));
+    var ul = el("ul", {}, "");
+    readings.forEach(function(r){ ul.appendChild(el("li", {}, r)); });
+    d.appendChild(ul);
+    return d;
+  }
+
+  function rationaleFor(goal, subject, refiner){
+    var subjectPhrase = subject === "human" ? "human participants" : subject === "texts" ? "texts and documents" : "both people and the texts they produce";
+    var g = GOALS.filter(function(x){return x.id===goal;})[0];
+    var base = "You said your goal is to " + g.label.toLowerCase() + ", working with " + subjectPhrase + ".";
+    if (goal === "real-time-behavior" && refiner){
+      base += refiner === "sustained" ? " Sustained time in the setting is the hallmark of ethnographic fieldwork." : " A shorter, targeted look at behavior is exactly what structured observation is built for.";
+    }
+    return base;
+  }
+
+  function renderReferenceAccordion(){
+    var container = document.getElementById("refAccordion");
+    container.innerHTML = "";
+    Object.keys(METHODS).forEach(function(id){
+      container.appendChild(supplementBlock(METHODS[id].name, METHODS[id].readings));
+    });
+    container.appendChild(supplementBlock(SUPPLEMENTS.foundational.name, SUPPLEMENTS.foundational.readings));
+    container.appendChild(supplementBlock(SUPPLEMENTS.ethics.name, SUPPLEMENTS.ethics.readings));
+    container.appendChild(supplementBlock(SUPPLEMENTS.codingWriteup.name, SUPPLEMENTS.codingWriteup.readings));
+    container.appendChild(supplementBlock(SUPPLEMENTS.fieldDebates.name, SUPPLEMENTS.fieldDebates.readings));
+  }
+
+  function renderAll(){
+    renderChoiceCards(document.getElementById("goalCards"), GOALS, "goal");
+    renderRefiner();
+    renderChoiceCards(document.getElementById("subjectCards"), SUBJECTS, "subject");
+    renderResults();
+  }
+
+  document.getElementById("rqInput").addEventListener("input", function(){
+    if (document.getElementById("results").style.display === "block") renderResults();
+  });
+
+  renderAll();
+  renderReferenceAccordion();
+})();
+</script>
